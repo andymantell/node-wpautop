@@ -7,4 +7,4 @@ Also contains ports of the test suite from http://develop.svn.wordpress.org/trun
 
 "Hilarious" toilet humour copied verbatim from the WordPress sourcecode. No attempt has been made to clean the function up or make it "better". This is a rough and ready port, warts and all.
 
-Thanks goes to @stewiem2000 for emotional support during regular expression meltdowns.
+Thanks goes to [@stewiem2000](https://github.com/stewiem2000) for emotional support during regular expression meltdowns.
