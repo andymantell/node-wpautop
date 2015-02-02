@@ -1,4 +1,6 @@
-# Node.js wpautop()
+# Node.js wpautop() 
+[![Build Status](https://travis-ci.org/andymantell/node-wpautop.svg)](https://travis-ci.org/andymantell/node-wpautop)
+
 Node.js port of Wordpress' wpautop() function based on the sourcecode at http://develop.svn.wordpress.org/trunk/src/wp-includes/formatting.php
 
 Uses phpjs rather than attempting a full port, mainly for lazyness.
