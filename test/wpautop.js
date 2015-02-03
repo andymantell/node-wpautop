@@ -311,22 +311,11 @@ describe('wpautop', function() {
     phpjs.trim(wpautop(str)).should.be.eql('<p>' + str + '</p>');
   });
 
+  it('should autop a blockquotes contents but not the blockquote itself', function() {
+    var content  = "<blockquote>foo</blockquote>";
+    var expected = "<blockquote><p>foo</p></blockquote>";
 
+    phpjs.trim(wpautop(content)).should.be.eql(expected);
+  });
 
 });
-
-// Unimplemented tests:
-
-
-
-/**
- * wpautop() should autop a blockquote's contents but not the blockquote itself
- *
- * @ticket 27268
- */
-// function test_that_wpautop_does_not_wrap_blockquotes_but_does_autop_their_contents() {
-//   $content  = "<blockquote>foo</blockquote>";
-//   $expected = "<blockquote><p>foo</p></blockquote>";
-
-//   $this->assertEquals( $expected, trim( wpautop( $content ) ) );
-// }
