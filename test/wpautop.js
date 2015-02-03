@@ -233,88 +233,82 @@ describe('wpautop', function() {
 
   });
 
+  it('should not add <p> and <br/> around <param> and <embed>', function() {
+
+    var content1 = '\nParagraph one.' +
+      '\n' +
+      '\n<object width="400" height="224" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">' +
+      '\n<param name="src" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />' +
+      '\n<param name="allowfullscreen" value="true" />' +
+      '\n<param name="allowscriptaccess" value="always" />' +
+      '\n<param name="overstretch" value="true" />' +
+      '\n<param name="flashvars" value="isDynamicSeeking=true" />' +
+      '\n' +
+      '\n<embed width="400" height="224" type="application/x-shockwave-flash" src="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" wmode="direct" seamlesstabbing="true" allowfullscreen="true" overstretch="true" flashvars="isDynamicSeeking=true" />' +
+      '\n</object>' +
+      '\n' +
+      '\nParagraph two.';
+
+    var expected1 = "<p>Paragraph one.</p>\n" + // line breaks only after <p>
+      '<p><object width="400" height="224" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">' +
+      '<param name="src" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />' +
+      '<param name="allowfullscreen" value="true" />' +
+      '<param name="allowscriptaccess" value="always" />' +
+      '<param name="overstretch" value="true" />' +
+      '<param name="flashvars" value="isDynamicSeeking=true" />' +
+      '<embed width="400" height="224" type="application/x-shockwave-flash" src="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" wmode="direct" seamlesstabbing="true" allowfullscreen="true" overstretch="true" flashvars="isDynamicSeeking=true" />' +
+      "</object></p>\n" +
+      '<p>Paragraph two.</p>';
+
+    var content2 = '\nParagraph one.' +
+      '\n' +
+      '\n<div class="video-player" id="x-video-0">' +
+      '\n<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="360" id="video-0" standby="Standby text">' +
+      '\n<param name="movie" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />' +
+      '\n<param name="quality" value="best" />' +
+      '\n' +
+      '\n<param name="seamlesstabbing" value="true" />' +
+      '\n<param name="allowfullscreen" value="true" />' +
+      '\n<param name="allowscriptaccess" value="always" />' +
+      '\n<param name="overstretch" value="true" />' +
+      '\n' +
+      '\n<!--[if !IE]--><object type="application/x-shockwave-flash" data="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" width="640" height="360" standby="Standby text">' +
+      '\n<param name="quality" value="best" />' +
+      '\n' +
+      '\n<param name="seamlesstabbing" value="true" />' +
+      '\n<param name="allowfullscreen" value="true" />' +
+      '\n<param name="allowscriptaccess" value="always" />' +
+      '\n<param name="overstretch" value="true" />' +
+      '\n</object><!--<![endif]-->' +
+      '\n</object></div>' +
+      '\n' +
+      '\nParagraph two.';
+
+    var expected2 = "<p>Paragraph one.</p>\n" + // line breaks only after block tags
+      '<div class="video-player" id="x-video-0">' + "\n" +
+      '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="360" id="video-0" standby="Standby text">' +
+      '<param name="movie" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />' +
+      '<param name="quality" value="best" />' +
+      '<param name="seamlesstabbing" value="true" />' +
+      '<param name="allowfullscreen" value="true" />' +
+      '<param name="allowscriptaccess" value="always" />' +
+      '<param name="overstretch" value="true" />' +
+      '<!--[if !IE]--><object type="application/x-shockwave-flash" data="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" width="640" height="360" standby="Standby text">' +
+      '<param name="quality" value="best" />' +
+      '<param name="seamlesstabbing" value="true" />' +
+      '<param name="allowfullscreen" value="true" />' +
+      '<param name="allowscriptaccess" value="always" />' +
+      '<param name="overstretch" value="true" /></object><!--<![endif]-->' +
+      "</object></div>\n" +
+      '<p>Paragraph two.</p>';
+
+    phpjs.trim(wpautop(content1)).should.be.eql(expected1);
+    phpjs.trim(wpautop(content2)).should.be.eql(expected2);
+  });
+
 });
 
 // Unimplemented tests:
-
-/**
- * wpautop() Should not add <p> and <br/> around <param> and <embed>
- *
- * @ticket 26864
- */
-// public function test_param_embed_elements() {
-//   $content1 = '
-// Paragraph one.
-
-// <object width="400" height="224" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">
-// <param name="src" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />
-// <param name="allowfullscreen" value="true" />
-// <param name="allowscriptaccess" value="always" />
-// <param name="overstretch" value="true" />
-// <param name="flashvars" value="isDynamicSeeking=true" />
-
-// <embed width="400" height="224" type="application/x-shockwave-flash" src="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" wmode="direct" seamlesstabbing="true" allowfullscreen="true" overstretch="true" flashvars="isDynamicSeeking=true" />
-// </object>
-
-// Paragraph two.';
-
-//   $expected1 = "<p>Paragraph one.</p>\n" . // line breaks only after <p>
-//     '<p><object width="400" height="224" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">' .
-//     '<param name="src" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />' .
-//     '<param name="allowfullscreen" value="true" />' .
-//     '<param name="allowscriptaccess" value="always" />' .
-//     '<param name="overstretch" value="true" />' .
-//     '<param name="flashvars" value="isDynamicSeeking=true" />' .
-//     '<embed width="400" height="224" type="application/x-shockwave-flash" src="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" wmode="direct" seamlesstabbing="true" allowfullscreen="true" overstretch="true" flashvars="isDynamicSeeking=true" />' .
-//     "</object></p>\n" .
-//     '<p>Paragraph two.</p>';
-
-//   $content2 = '
-// Paragraph one.
-
-// <div class="video-player" id="x-video-0">
-// <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="360" id="video-0" standby="Standby text">
-// <param name="movie" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />
-// <param name="quality" value="best" />
-
-// <param name="seamlesstabbing" value="true" />
-// <param name="allowfullscreen" value="true" />
-// <param name="allowscriptaccess" value="always" />
-// <param name="overstretch" value="true" />
-
-// <!--[if !IE]--><object type="application/x-shockwave-flash" data="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" width="640" height="360" standby="Standby text">
-//   <param name="quality" value="best" />
-
-//   <param name="seamlesstabbing" value="true" />
-//   <param name="allowfullscreen" value="true" />
-//   <param name="allowscriptaccess" value="always" />
-//   <param name="overstretch" value="true" />
-// </object><!--<![endif]-->
-// </object></div>
-
-// Paragraph two.';
-
-//   $expected2 = "<p>Paragraph one.</p>\n" . // line breaks only after block tags
-//     '<div class="video-player" id="x-video-0">' . "\n" .
-//     '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="360" id="video-0" standby="Standby text">' .
-//     '<param name="movie" value="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" />' .
-//     '<param name="quality" value="best" />' .
-//     '<param name="seamlesstabbing" value="true" />' .
-//     '<param name="allowfullscreen" value="true" />' .
-//     '<param name="allowscriptaccess" value="always" />' .
-//     '<param name="overstretch" value="true" />' .
-//     '<!--[if !IE]--><object type="application/x-shockwave-flash" data="http://domain.tld/wp-content/uploads/2013/12/xyz.swf" width="640" height="360" standby="Standby text">' .
-//     '<param name="quality" value="best" />' .
-//     '<param name="seamlesstabbing" value="true" />' .
-//     '<param name="allowfullscreen" value="true" />' .
-//     '<param name="allowscriptaccess" value="always" />' .
-//     '<param name="overstretch" value="true" /></object><!--<![endif]-->' .
-//     "</object></div>\n" .
-//     '<p>Paragraph two.</p>';
-
-//   $this->assertEquals( $expected1, trim( wpautop( $content1 ) ) );
-//   $this->assertEquals( $expected2, trim( wpautop( $content2 ) ) );
-// }
 
 /**
  * wpautop() Should not add <br/> to "<select>" or "<option>" elements
