@@ -154,17 +154,17 @@ describe('wpautop', function() {
 
     var content = "Paragraph one.\n\n" +
       '<video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">' +
-      '<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
-      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
-      '<source type="video/webm" src="myvideo.webm" />' +
-      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
-      '<source type="video/ogg" src="myvideo.ogv" />' +
-      '<!-- Optional: Add subtitles for each language -->' +
-      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
-      '<!-- Optional: Add chapters -->' +
-      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
-      '<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>' +
-      '</video>' +
+      '\n<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
+      '\n<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '\n<source type="video/webm" src="myvideo.webm" />' +
+      '\n<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '\n<source type="video/ogg" src="myvideo.ogv" />' +
+      '\n<!-- Optional: Add subtitles for each language -->' +
+      '\n<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '\n<!-- Optional: Add chapters -->' +
+      '\n<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '\n<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>' +
+      '\n</video>' +
       "\n\nParagraph two.";
 
     var content2 = "Paragraph one.\n\n" +
