@@ -120,36 +120,34 @@ describe('wpautop', function() {
     phpjs.trim(wpautop(content)).should.be.eql(expected);
   });
 
+  it('Should not alter the contents of "<pre>" elements', function() {
+    var str, expected;
+
+    var code = fs.readFileSync(path.resolve(fixtures, 'sizzle.js'), {encoding: 'UTF-8'});
+    code = code.replace( "\r", '', code );
+    code = phpjs.htmlentities(code);
+
+    // Not wrapped in <p> tags
+    str = '<pre>' + code + '</pre>';
+    phpjs.trim(wpautop(str)).should.be.eql(str);
+
+    // Text before/after is wrapped in <p> tags
+    str = 'Look at this code\n\n<pre>' + code + '</pre>\n\nIsn\'t that cool?';
+
+    // Expected text after wpautop
+    expected = '<p>Look at this code</p>' + "\n<pre>" + code + "</pre>\n" + '<p>Isn\'t that cool?</p>';
+    phpjs.trim(wpautop(str)).should.be.eql(expected);
+
+    // Make sure HTML breaks are maintained if manually inserted
+    str = "Look at this code\n\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
+    expected = "<p>Look at this code</p>\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n<p>Cool, huh?</p>";
+    phpjs.trim(wpautop(str)).should.be.eql(expected);
+
+  });
+
 });
 
 // Unimplemented tests:
-
-/**
- * wpautop() Should not alter the contents of "<pre>" elements
- *
- * @ticket 19855
- */
-// public function test_skip_pre_elements() {
-//   $code = file_get_contents( DIR_TESTDATA . '/formatting/sizzle.js' );
-//   $code = str_replace( "\r", '', $code );
-//   $code = htmlentities( $code );
-
-//   // Not wrapped in <p> tags
-//   $str = "<pre>$code</pre>";
-//   $this->assertEquals( $str, trim( wpautop( $str ) ) );
-
-//   // Text before/after is wrapped in <p> tags
-//   $str = "Look at this code\n\n<pre>$code</pre>\n\nIsn't that cool?";
-
-//   // Expected text after wpautop
-//   $expected = '<p>Look at this code</p>' . "\n<pre>" . $code . "</pre>\n" . '<p>Isn\'t that cool?</p>';
-//   $this->assertEquals( $expected, trim( wpautop( $str ) ) );
-
-//   // Make sure HTML breaks are maintained if manually inserted
-//   $str = "Look at this code\n\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
-//   $expected = "<p>Look at this code</p>\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n<p>Cool, huh?</p>";
-//   $this->assertEquals( $expected, trim( wpautop( $str ) ) );
-// }
 
 /**
  * wpautop() Should not add <br/> to "<input>" elements
