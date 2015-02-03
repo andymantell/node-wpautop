@@ -170,23 +170,23 @@ describe('wpautop', function() {
     var content2 = "Paragraph one.\n\n" +
       '<video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">' +
       '\n' +
-      '<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
+      '\n<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
       '\n' +
-      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
-      '<source type="video/webm" src="myvideo.webm" />' +
+      '\n<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '\n<source type="video/webm" src="myvideo.webm" />' +
       '\n' +
-      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
-      '<source type="video/ogg" src="myvideo.ogv" />' +
+      '\n<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '\n<source type="video/ogg" src="myvideo.ogv" />' +
       '\n' +
-      '<!-- Optional: Add subtitles for each language -->' +
-      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '\n<!-- Optional: Add subtitles for each language -->' +
+      '\n<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
       '\n' +
-      '<!-- Optional: Add chapters -->' +
-      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '\n<!-- Optional: Add chapters -->' +
+      '\n<track kind="chapters" src="chapters.srt" srclang="en" />' +
       '\n' +
-      '<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>' +
+      '\n<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>' +
       '\n' +
-      '</video>'  +
+      '\n</video>'  +
       "\n\nParagraph two.";
 
     var expected = "<p>Paragraph one.</p>\n" + // line breaks only after <p>
@@ -206,16 +206,16 @@ describe('wpautop', function() {
 
     // When running the content through wpautop() from wp_richedit_pre()
     var shortcode_content = "Paragraph one.\n\n"  +
-      '[video width="720" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]' +
-      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
-      '<source type="video/webm" src="myvideo.webm" />' +
-      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
-      '<source type="video/ogg" src="myvideo.ogv" />' +
-      '<!-- Optional: Add subtitles for each language -->' +
-      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
-      '<!-- Optional: Add chapters -->' +
-      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
-      '[/video]' +
+      '\n[video width="720" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]' +
+      '\n<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '\n<source type="video/webm" src="myvideo.webm" />' +
+      '\n<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '\n<source type="video/ogg" src="myvideo.ogv" />' +
+      '\n<!-- Optional: Add subtitles for each language -->' +
+      '\n<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '\n<!-- Optional: Add chapters -->' +
+      '\n<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '\n[/video]' +
       "\n\nParagraph two.";
 
     var shortcode_expected = "<p>Paragraph one.</p>\n" + // line breaks only after <p>
