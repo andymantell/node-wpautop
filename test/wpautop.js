@@ -120,7 +120,7 @@ describe('wpautop', function() {
     phpjs.trim(wpautop(content)).should.be.eql(expected);
   });
 
-  it('Should not alter the contents of "<pre>" elements', function() {
+  it('should not alter the contents of "<pre>" elements', function() {
     var str, expected;
 
     var code = fs.readFileSync(path.resolve(fixtures, 'sizzle.js'), {encoding: 'UTF-8'});
@@ -145,105 +145,97 @@ describe('wpautop', function() {
 
   });
 
+  it('should not add <br/> to "<input>" elements', function() {
+    var str = 'Username: <input type="text" id="username" name="username" /><br />Password: <input type="password" id="password1" name="password1" />';
+    phpjs.trim(wpautop(str)).should.eql('<p>' + str + '</p>');
+  });
+
+  it('should not add <p> and <br/> around <source> and <track>', function() {
+
+    var content = "Paragraph one.\n\n" +
+      '<video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">' +
+      '<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
+      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '<source type="video/webm" src="myvideo.webm" />' +
+      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '<source type="video/ogg" src="myvideo.ogv" />' +
+      '<!-- Optional: Add subtitles for each language -->' +
+      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '<!-- Optional: Add chapters -->' +
+      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>' +
+      '</video>' +
+      "\n\nParagraph two.";
+
+    var content2 = "Paragraph one.\n\n" +
+      '<video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">' +
+      '\n' +
+      '<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
+      '\n' +
+      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '<source type="video/webm" src="myvideo.webm" />' +
+      '\n' +
+      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '<source type="video/ogg" src="myvideo.ogv" />' +
+      '\n' +
+      '<!-- Optional: Add subtitles for each language -->' +
+      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '\n' +
+      '<!-- Optional: Add chapters -->' +
+      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '\n' +
+      '<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>' +
+      '\n' +
+      '</video>'  +
+      "\n\nParagraph two.";
+
+    var expected = "<p>Paragraph one.</p>\n" + // line breaks only after <p>
+      '<p><video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">' +
+      '<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' +
+      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '<source type="video/webm" src="myvideo.webm" />' +
+      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '<source type="video/ogg" src="myvideo.ogv" />' +
+      '<!-- Optional: Add subtitles for each language -->' +
+      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '<!-- Optional: Add chapters -->' +
+      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">' +
+      "http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a></video></p>\n" +
+      '<p>Paragraph two.</p>';
+
+    // When running the content through wpautop() from wp_richedit_pre()
+    var shortcode_content = "Paragraph one.\n\n"  +
+      '[video width="720" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]' +
+      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' +
+      '<source type="video/webm" src="myvideo.webm" />' +
+      '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' +
+      '<source type="video/ogg" src="myvideo.ogv" />' +
+      '<!-- Optional: Add subtitles for each language -->' +
+      '<track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '<!-- Optional: Add chapters -->' +
+      '<track kind="chapters" src="chapters.srt" srclang="en" />' +
+      '[/video]' +
+      "\n\nParagraph two.";
+
+    var shortcode_expected = "<p>Paragraph one.</p>\n" + // line breaks only after <p>
+      '<p>[video width="720" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]' +
+      '<!-- WebM/VP8 for Firefox4, Opera, and Chrome --><source type="video/webm" src="myvideo.webm" />' +
+      '<!-- Ogg/Vorbis for older Firefox and Opera versions --><source type="video/ogg" src="myvideo.ogv" />' +
+      '<!-- Optional: Add subtitles for each language --><track kind="subtitles" src="subtitles.srt" srclang="en" />' +
+      '<!-- Optional: Add chapters --><track kind="chapters" src="chapters.srt" srclang="en" />' +
+      "[/video]</p>\n" +
+      '<p>Paragraph two.</p>';
+
+    phpjs.trim(wpautop(content)).should.be.eql(expected);
+    phpjs.trim(wpautop(content2)).should.be.eql(expected);
+    phpjs.trim(wpautop(shortcode_content)).should.be.eql(shortcode_expected);
+
+  });
+
 });
 
 // Unimplemented tests:
-
-/**
- * wpautop() Should not add <br/> to "<input>" elements
- *
- * @ticket 16456
- */
-// public function test_skip_input_elements() {
-//   $str = 'Username: <input type="text" id="username" name="username" /><br />Password: <input type="password" id="password1" name="password1" />';
-//   $this->assertEquals( "<p>$str</p>", trim( wpautop( $str ) ) );
-// }
-
-/**
- * wpautop() Should not add <p> and <br/> around <source> and <track>
- *
- * @ticket 26864
- */
-// public function test_source_track_elements() {
-//   $content = "Paragraph one.\n\n" .
-//     '<video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">
-//       <source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />
-//       <!-- WebM/VP8 for Firefox4, Opera, and Chrome -->
-//       <source type="video/webm" src="myvideo.webm" />
-//       <!-- Ogg/Vorbis for older Firefox and Opera versions -->
-//       <source type="video/ogg" src="myvideo.ogv" />
-//       <!-- Optional: Add subtitles for each language -->
-//       <track kind="subtitles" src="subtitles.srt" srclang="en" />
-//       <!-- Optional: Add chapters -->
-//       <track kind="chapters" src="chapters.srt" srclang="en" />
-//       <a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>
-//     </video>' .
-//     "\n\nParagraph two.";
-
-//   $content2 = "Paragraph one.\n\n" .
-//     '<video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">
-
-//     <source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />
-
-//     <!-- WebM/VP8 for Firefox4, Opera, and Chrome -->
-//     <source type="video/webm" src="myvideo.webm" />
-
-//     <!-- Ogg/Vorbis for older Firefox and Opera versions -->
-//     <source type="video/ogg" src="myvideo.ogv" />
-
-//     <!-- Optional: Add subtitles for each language -->
-//     <track kind="subtitles" src="subtitles.srt" srclang="en" />
-
-//     <!-- Optional: Add chapters -->
-//     <track kind="chapters" src="chapters.srt" srclang="en" />
-
-//     <a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a>
-
-//     </video>' .
-//     "\n\nParagraph two.";
-
-//   $expected = "<p>Paragraph one.</p>\n" . // line breaks only after <p>
-//     '<p><video class="wp-video-shortcode" id="video-0-1" width="640" height="360" preload="metadata" controls="controls">' .
-//     '<source type="video/mp4" src="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4" />' .
-//     '<!-- WebM/VP8 for Firefox4, Opera, and Chrome -->' .
-//     '<source type="video/webm" src="myvideo.webm" />' .
-//     '<!-- Ogg/Vorbis for older Firefox and Opera versions -->' .
-//     '<source type="video/ogg" src="myvideo.ogv" />' .
-//     '<!-- Optional: Add subtitles for each language -->' .
-//     '<track kind="subtitles" src="subtitles.srt" srclang="en" />' .
-//     '<!-- Optional: Add chapters -->' .
-//     '<track kind="chapters" src="chapters.srt" srclang="en" />' .
-//     '<a href="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4">' .
-//     "http://domain.tld/wp-content/uploads/2013/12/xyz.mp4</a></video></p>\n" .
-//     '<p>Paragraph two.</p>';
-
-//   // When running the content through wpautop() from wp_richedit_pre()
-//   $shortcode_content = "Paragraph one.\n\n" .
-//     '[video width="720" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]
-//     <!-- WebM/VP8 for Firefox4, Opera, and Chrome -->
-//     <source type="video/webm" src="myvideo.webm" />
-//     <!-- Ogg/Vorbis for older Firefox and Opera versions -->
-//     <source type="video/ogg" src="myvideo.ogv" />
-//     <!-- Optional: Add subtitles for each language -->
-//     <track kind="subtitles" src="subtitles.srt" srclang="en" />
-//     <!-- Optional: Add chapters -->
-//     <track kind="chapters" src="chapters.srt" srclang="en" />
-//     [/video]' .
-//     "\n\nParagraph two.";
-
-//   $shortcode_expected = "<p>Paragraph one.</p>\n" . // line breaks only after <p>
-//     '<p>[video width="720" height="480" mp4="http://domain.tld/wp-content/uploads/2013/12/xyz.mp4"]' .
-//     '<!-- WebM/VP8 for Firefox4, Opera, and Chrome --><source type="video/webm" src="myvideo.webm" />' .
-//     '<!-- Ogg/Vorbis for older Firefox and Opera versions --><source type="video/ogg" src="myvideo.ogv" />' .
-//     '<!-- Optional: Add subtitles for each language --><track kind="subtitles" src="subtitles.srt" srclang="en" />' .
-//     '<!-- Optional: Add chapters --><track kind="chapters" src="chapters.srt" srclang="en" />' .
-//     "[/video]</p>\n" .
-//     '<p>Paragraph two.</p>';
-
-//   $this->assertEquals( $expected, trim( wpautop( $content ) ) );
-//   $this->assertEquals( $expected, trim( wpautop( $content2 ) ) );
-//   $this->assertEquals( $shortcode_expected, trim( wpautop( $shortcode_content ) ) );
-// }
 
 /**
  * wpautop() Should not add <p> and <br/> around <param> and <embed>
