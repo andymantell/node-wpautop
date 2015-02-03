@@ -106,7 +106,8 @@ describe('wpautop', function() {
       'select',
     ];
 
-    var content = expected = [];
+    var content = [];
+    var expected = [];
 
     inlines.forEach(function(inline) {
       content.push('<' + inline + '>foo</' + inline + '>');
