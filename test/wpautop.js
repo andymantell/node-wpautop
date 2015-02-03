@@ -3,9 +3,9 @@ var fs = require('fs');
 var path = require('path');
 var phpjs = require('phpjs');
 
-var wpautop = require('../../lib/wpautop');
+var wpautop = require('../lib/wpautop');
 
-var fixtures = path.join(__dirname, '../fixtures');
+var fixtures = path.join(__dirname, 'fixtures');
 
 describe('wpautop', function() {
   //From ticket https://core.trac.wordpress.org/ticket/11008
