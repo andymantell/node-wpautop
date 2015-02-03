@@ -1,6 +1,6 @@
 {
   "name": "wpautop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node.js port of Wordpress' wpautop() function",
   "main": "lib/wpautop.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/andymantell/node-wpautop.git"
   },
   "author": "Andy Mantell <contact@andymantell.com> (http://andymantell.com/)",
-  "license": "MIT",
+  "license": "GPLv2",
   "bugs": {
     "url": "https://github.com/andymantell/node-wpautop/issues"
   },
