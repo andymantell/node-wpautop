@@ -73,8 +73,52 @@ describe('wpautop', function() {
     var expected = content.join("\n");
     content = content.join("\n\n"); // WS difference
 
-    expected.should.be.eql(phpjs.trim(wpautop(content)));
+    phpjs.trim(wpautop(content)).should.be.eql(expected);
   });
+
+  it('should treat inline HTML elements as inline', function() {
+    var inlines = [
+      'a',
+      'em',
+      'strong',
+      'small',
+      's',
+      'cite',
+      'q',
+      'dfn',
+      'abbr',
+      'data',
+      'time',
+      'code',
+      'var',
+      'samp',
+      'kbd',
+      'sub',
+      'sup',
+      'i',
+      'b',
+      'u',
+      'mark',
+      'span',
+      'del',
+      'ins',
+      'noscript',
+      'select',
+    ];
+
+    var content = expected = [];
+
+    inlines.forEach(function(inline) {
+      content.push('<' + inline + '>foo</' + inline + '>');
+      expected.push('<p><' + inline + '>foo</' + inline + '></p>');
+    });
+
+    content = content.join("\n\n");
+    expected = expected.join("\n");
+
+    phpjs.trim(wpautop(content)).should.be.eql(expected);
+  });
+
 });
 
 // Unimplemented tests:
@@ -299,54 +343,6 @@ describe('wpautop', function() {
 // function test_that_wpautop_does_not_wrap_blockquotes_but_does_autop_their_contents() {
 //   $content  = "<blockquote>foo</blockquote>";
 //   $expected = "<blockquote><p>foo</p></blockquote>";
-
-//   $this->assertEquals( $expected, trim( wpautop( $content ) ) );
-// }
-
-/**
- * wpautop() should treat inline HTML elements as inline.
- *
- * @ticket 27268
- */
-// function test_that_wpautop_treats_inline_elements_as_inline() {
-//   $inlines = array(
-//     'a',
-//     'em',
-//     'strong',
-//     'small',
-//     's',
-//     'cite',
-//     'q',
-//     'dfn',
-//     'abbr',
-//     'data',
-//     'time',
-//     'code',
-//     'var',
-//     'samp',
-//     'kbd',
-//     'sub',
-//     'sup',
-//     'i',
-//     'b',
-//     'u',
-//     'mark',
-//     'span',
-//     'del',
-//     'ins',
-//     'noscript',
-//     'select',
-//   );
-
-//   $content = $expected = array();
-
-//   foreach ( $inlines as $inline ) {
-//     $content[] = "<$inline>foo</$inline>";
-//     $expected[] = "<p><$inline>foo</$inline></p>";
-//   }
-
-//   $content = join( "\n\n", $content );
-//   $expected = join( "\n", $expected );
 
 //   $this->assertEquals( $expected, trim( wpautop( $content ) ) );
 // }
