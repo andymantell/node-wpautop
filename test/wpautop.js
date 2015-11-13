@@ -320,7 +320,7 @@ describe('wpautop', function() {
 
   it('should not choke on an alternating set of <pre> and <div> tags', function() {
     var content  = "<div>div 1</div><pre>pre 1</pre><div>div 2</div><pre>pre 2</pre><div>div 3</div><pre>pre 3</pre><div>div 4</div><pre>pre 4</pre>";
-    var expected = "<div>div 1</div><pre>pre 1</pre><div>div 2</div><pre>pre 2</pre><div>div 3</div><pre>pre 3</pre><div>div 4</div><pre>pre 4</pre>";
+    var expected = "<div>div 1</div>\n<pre>pre 1</pre>\n<div>div 2</div>\n<pre>pre 2</pre>\n<div>div 3</div>\n<pre>pre 3</pre>\n<div>div 4</div>\n<pre>pre 4</pre>";
 
     phpjs.trim(wpautop(content)).should.be.eql(expected);
   });
