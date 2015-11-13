@@ -318,4 +318,11 @@ describe('wpautop', function() {
     phpjs.trim(wpautop(content)).should.be.eql(expected);
   });
 
+  it('should not choke on an alternating set of <pre> and <div> tags', function() {
+    var content  = "<div>div 1</div><pre>pre 1</pre><div>div 2</div><pre>pre 2</pre><div>div 3</div><pre>pre 3</pre><div>div 4</div><pre>pre 4</pre>";
+    var expected = "<div>div 1</div><pre>pre 1</pre><div>div 2</div><pre>pre 2</pre><div>div 3</div><pre>pre 3</pre><div>div 4</div><pre>pre 4</pre>";
+
+    phpjs.trim(wpautop(content)).should.be.eql(expected);
+  });
+
 });
