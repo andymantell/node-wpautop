@@ -1,6 +1,9 @@
 {
   "name": "wpautop",
   "version": "0.2.2",
+  "engines": {
+    "node": ">= 4"
+  },
   "description": "Node.js port of Wordpress' wpautop() function",
   "main": "lib/wpautop.js",
   "scripts": {
