@@ -1,7 +1,6 @@
 var should = require('should');
 var fs = require('fs');
 var path = require('path');
-var phpjs = require('phpjs');
 
 var wpautop = require('../lib/wpautop');
 
@@ -73,7 +72,7 @@ describe('wpautop', function() {
     var expected = content.join("\n");
     content = content.join("\n\n"); // WS difference
 
-    phpjs.trim(wpautop(content)).should.be.eql(expected);
+    wpautop(content).trim().should.be.eql(expected);
   });
 
   it('should treat inline HTML elements as inline', function() {
@@ -117,7 +116,7 @@ describe('wpautop', function() {
     content = content.join("\n\n");
     expected = expected.join("\n");
 
-    phpjs.trim(wpautop(content)).should.be.eql(expected);
+    wpautop(content).trim().should.be.eql(expected);
   });
 
   it('should not alter the contents of "<pre>" elements', function() {
@@ -125,29 +124,28 @@ describe('wpautop', function() {
 
     var code = fs.readFileSync(path.resolve(fixtures, 'sizzle.js'), {encoding: 'UTF-8'});
     code = code.replace( "\r", '', code );
-    code = phpjs.htmlentities(code);
 
     // Not wrapped in <p> tags
     str = '<pre>' + code + '</pre>';
-    phpjs.trim(wpautop(str)).should.be.eql(str);
+    wpautop(str).trim().should.be.eql(str);
 
     // Text before/after is wrapped in <p> tags
     str = 'Look at this code\n\n<pre>' + code + '</pre>\n\nIsn\'t that cool?';
 
     // Expected text after wpautop
     expected = '<p>Look at this code</p>' + "\n<pre>" + code + "</pre>\n" + '<p>Isn\'t that cool?</p>';
-    phpjs.trim(wpautop(str)).should.be.eql(expected);
+    wpautop(str).trim().should.be.eql(expected);
 
     // Make sure HTML breaks are maintained if manually inserted
     str = "Look at this code\n\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n\nCool, huh?";
     expected = "<p>Look at this code</p>\n<pre>Line1<br />Line2<br>Line3<br/>Line4\nActual Line 2\nActual Line 3</pre>\n<p>Cool, huh?</p>";
-    phpjs.trim(wpautop(str)).should.be.eql(expected);
+    wpautop(str).trim().should.be.eql(expected);
 
   });
 
   it('should not add <br/> to "<input>" elements', function() {
     var str = 'Username: <input type="text" id="username" name="username" /><br />Password: <input type="password" id="password1" name="password1" />';
-    phpjs.trim(wpautop(str)).should.eql('<p>' + str + '</p>');
+    wpautop(str).trim().should.eql('<p>' + str + '</p>');
   });
 
   it('should not add <p> and <br/> around <source> and <track>', function() {
@@ -227,9 +225,9 @@ describe('wpautop', function() {
       "[/video]</p>\n" +
       '<p>Paragraph two.</p>';
 
-    phpjs.trim(wpautop(content)).should.be.eql(expected);
-    phpjs.trim(wpautop(content2)).should.be.eql(expected);
-    phpjs.trim(wpautop(shortcode_content)).should.be.eql(shortcode_expected);
+    wpautop(content).trim().should.be.eql(expected);
+    wpautop(content2).trim().should.be.eql(expected);
+    wpautop(shortcode_content).trim().should.be.eql(shortcode_expected);
 
   });
 
@@ -302,27 +300,27 @@ describe('wpautop', function() {
       "</object></div>\n" +
       '<p>Paragraph two.</p>';
 
-    phpjs.trim(wpautop(content1)).should.be.eql(expected1);
-    phpjs.trim(wpautop(content2)).should.be.eql(expected2);
+    wpautop(content1).trim().should.be.eql(expected1);
+    wpautop(content2).trim().should.be.eql(expected2);
   });
 
   it('should not add <br/> to "<select>" or "<option>" elements', function() {
     var str = 'Country: <select id="state" name="state"><option value="1">Alabama</option><option value="2">Alaska</option><option value="3">Arizona</option><option value="4">Arkansas</option><option value="5">California</option></select>';
-    phpjs.trim(wpautop(str)).should.be.eql('<p>' + str + '</p>');
+    wpautop(str).trim().should.be.eql('<p>' + str + '</p>');
   });
 
   it('should autop a blockquotes contents but not the blockquote itself', function() {
     var content  = "<blockquote>foo</blockquote>";
     var expected = "<blockquote><p>foo</p></blockquote>";
 
-    phpjs.trim(wpautop(content)).should.be.eql(expected);
+    wpautop(content).trim().should.be.eql(expected);
   });
 
   it('should not choke on an alternating set of <pre> and <div> tags', function() {
     var content  = "<div>div 1</div><pre>pre 1</pre><div>div 2</div><pre>pre 2</pre><div>div 3</div><pre>pre 3</pre><div>div 4</div><pre>pre 4</pre>";
     var expected = "<div>div 1</div>\n<pre>pre 1</pre>\n<div>div 2</div>\n<pre>pre 2</pre>\n<div>div 3</div>\n<pre>pre 3</pre>\n<div>div 4</div>\n<pre>pre 4</pre>";
 
-    phpjs.trim(wpautop(content)).should.be.eql(expected);
+    wpautop(content).trim().should.be.eql(expected);
   });
 
 });

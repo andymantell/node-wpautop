@@ -1,6 +1,9 @@
 {
   "name": "wpautop",
   "version": "0.2.2",
+  "engines": {
+    "node": ">= 4"
+  },
   "description": "Node.js port of Wordpress' wpautop() function",
   "main": "lib/wpautop.js",
   "scripts": {
@@ -17,10 +20,7 @@
   },
   "homepage": "https://github.com/andymantell/node-wpautop",
   "devDependencies": {
-    "mocha-jshint": "0.0.9",
+    "mocha": "^4.1.0",
     "should": "^4.6.2"
-  },
-  "dependencies": {
-    "phpjs": "^1.3.2"
   }
 }
