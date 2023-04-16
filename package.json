@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/andymantell/node-wpautop",
   "devDependencies": {
-    "mocha": "^4.1.0",
+    "mocha": "^10.2.0",
     "should": "^4.6.2"
   }
 }
